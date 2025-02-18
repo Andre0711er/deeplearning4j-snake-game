@@ -16,7 +16,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 
-public class SnakeDl4j extends JFrame {
+public final class SnakeDl4j extends JFrame {
     private static final Logger LOG = LoggerFactory.getLogger(SnakeDl4j.class);
 
     private SnakeDl4j() {
@@ -48,7 +48,7 @@ public class SnakeDl4j extends JFrame {
             // Save network
             try {
                 dql.getNeuralNet().save(randomNetworkName);
-            } catch (IOException e) {
+            } catch (final IOException e) {
                 LOG.error(e.getMessage(), e);
             }
             // Reset the game
@@ -61,7 +61,7 @@ public class SnakeDl4j extends JFrame {
         thread.start();
     }
 
-    private void evaluateNetwork(Game game, String randomNetworkName) {
+    private void evaluateNetwork(final Game game, final String randomNetworkName) {
         final MultiLayerNetwork multiLayerNetwork = NetworkUtil.loadNetwork(randomNetworkName);
         int highscore = 0;
         for (int i = 0; i < 1000; i++) {
@@ -70,8 +70,8 @@ public class SnakeDl4j extends JFrame {
                 try {
                     final GameState state = game.buildStateObservation();
                     final INDArray output = multiLayerNetwork.output(state.getMatrix(), false);
-                    double[] data = output.data().asDouble();
-                    int maxValueIndex = GameStateUtil.getMaxValueIndex(data);
+                    final double[] data = output.data().asDouble();
+                    final int maxValueIndex = GameStateUtil.getMaxValueIndex(data);
 
                     game.changeDirection(Action.getActionByIndex(maxValueIndex));
                     game.move();
@@ -97,9 +97,9 @@ public class SnakeDl4j extends JFrame {
         LOG.info("Finished evaluation of the network, highscore was '{}'", highscore);
     }
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         EventQueue.invokeLater(() -> {
-            JFrame ex = new SnakeDl4j();
+            final JFrame ex = new SnakeDl4j();
             ex.setVisible(true);
         });
     }
